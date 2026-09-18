@@ -4,7 +4,7 @@ The best researchers seem to operate by rules like these — rarely written down
 
 <p align="center"><em>An opinionated operating manual for rigorous, reproducible, and publishable ML research.</em></p>
 
-Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-with-yoshua-bengio/), [Gebru](https://doi.org/10.1145/3458723), [Hamming](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html), [Hinton](https://digitalhabitats.global/blogs/synthetic-minds/geoffrey-hinton-on-working-with-ilya-choosing-problems-and-the-power-of-intuition), [Karpathy](http://karpathy.github.io/2019/04/25/recipe/), [LeCun](https://www.youtube.com/watch?v=Umi6Vkv9DNQ), [Li](https://profiles.stanford.edu/fei-fei-li), [Ng](https://www.kdnuggets.com/2019/09/advice-building-machine-learning-career-research-papers-andrew-ng.html), [Pineau](https://www.cs.mcgill.ca/~jpineau/ReproducibilityChecklist.pdf), [Raschka](https://sebastianraschka.com/blog/2022/confidence-intervals-for-ml.html), [Schulman](http://joschu.net/blog/opinionated-guide-ml-research.html), [Varoquaux](https://gael-varoquaux.info/about.html), and hard-won community wisdom.
+Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-with-yoshua-bengio/), [Gebru](https://doi.org/10.1145/3458723), [Hamming](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html), [Hinton](https://www.youtube.com/watch?v=4W5askrV-wY), [Karpathy](http://karpathy.github.io/2019/04/25/recipe/), [LeCun](https://www.youtube.com/watch?v=Umi6Vkv9DNQ), [Li](https://www.amacad.org/publication/daedalus/searching-computer-vision-north-stars), [Ng](https://www.kdnuggets.com/2019/09/advice-building-machine-learning-career-research-papers-andrew-ng.html), [Pineau](https://www.cs.mcgill.ca/~jpineau/ReproducibilityChecklist.pdf), [Raschka](https://sebastianraschka.com/blog/2022/confidence-intervals-for-ml.html), [Schulman](http://joschu.net/blog/opinionated-guide-ml-research.html), [Varoquaux](https://doi.org/10.1038/s41746-022-00592-y), and hard-won community wisdom.
 
 ---
 
@@ -17,14 +17,14 @@ Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-
 5. **Be ambitious about importance, not difficulty.** A 10x more important problem typically requires only 2-3x more effort. ([Karpathy](http://karpathy.github.io/2016/09/07/phd/))
 6. **Protect thinking time.** Block time each week with no coding, writing, or reading -- just thinking about big questions. ([Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-with-yoshua-bengio/))
 7. **Trust your intuition, then verify.** "If you don't allow yourself to say things that could be wrong, you're not going to be a researcher." ([Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-with-yoshua-bengio/))
-8. **The north star is the problem, not the method.** Don't chase the latest technique -- ask what problem in the world your work serves. Sometimes the most impactful contribution is the dataset or benchmark that reframes the question. ([Fei-Fei Li](https://profiles.stanford.edu/fei-fei-li))
+8. **The north star is the problem, not the method.** Don't chase the latest technique -- ask what problem in the world your work serves. Sometimes the most impactful contribution is the dataset or benchmark that reframes the question. ([Li & Krishna, *Searching for Computer Vision North Stars*](https://www.amacad.org/publication/daedalus/searching-computer-vision-north-stars))
 
 ---
 
 ## II. Becoming One with the Data
 
 9. **Spend hours with your data before writing any model code.** Scan thousands of examples. Identify duplicates, corrupted labels, imbalances, biases. Write code to search/filter/sort by any dimension. ([Karpathy](http://karpathy.github.io/2019/04/25/recipe/))
-10. **Data quality > model architecture.** Most gains in real-world applications come from better data handling, not fancier models. Invest your time accordingly. ([Varoquaux](https://gael-varoquaux.info/about.html))
+10. **Data quality > model architecture.** Most gains in real-world applications come from better data handling, not fancier models. Invest your time accordingly. ([Varoquaux & Cheplygina](https://doi.org/10.1038/s41746-022-00592-y))
 11. **Document your data.** Every dataset you use or release should have a datasheet: motivation, composition, collection process, preprocessing, intended uses, and limitations. ([Gebru](https://doi.org/10.1145/3458723))
 12. **Visualize everything.** Distributions, outliers, correlations, class balance. If you can't visualize it, you don't understand it.
 13. **Verify data just before it enters the model.** Visualize the exact tensor that goes into `model(x)` -- after all preprocessing, augmentation, and batching. ([Karpathy](http://karpathy.github.io/2019/04/25/recipe/))
@@ -46,7 +46,7 @@ Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-
 
 ## IV. Reproducibility
 
-22. **Every run is reproducible.** Your `set_seed()` helper should seed `random`, `numpy`, `torch`, `torch.cuda`, and set `PYTHONHASHSEED`, `cudnn.deterministic`, and `cudnn.benchmark`. Use `torch.use_deterministic_algorithms(True, warn_only=True)` during development. ([PyTorch Reproducibility Docs](https://pytorch.org/docs/stable/notes/randomness.html))
+22. **Every run is reproducible.** Your `set_seed()` helper should seed `random`, `numpy`, `torch`, `torch.cuda`, and set `cudnn.deterministic=True` and `cudnn.benchmark=False`. Set `PYTHONHASHSEED` in the environment before Python starts (e.g. in your launch script) -- setting it inside the script has no effect. Use `torch.use_deterministic_algorithms(True, warn_only=True)` during development. ([PyTorch Reproducibility Docs](https://pytorch.org/docs/stable/notes/randomness.html))
 23. **Pin everything.** Python version, PyTorch version, CUDA version, every dependency. Use `pyproject.toml` with exact versions + a lockfile. Include a `Dockerfile` for full environment reproducibility.
 24. **Snapshot configs with every run.** Every run gets a timestamped output directory with the full resolved config, git state, and argv saved automatically. If you can't answer "exactly what produced this number?" six months later, it didn't happen.
 25. **Tag every experiment with a git commit.** Experiment trackers like W&B do this automatically. Never run experiments on uncommitted code.
@@ -66,13 +66,13 @@ Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-
 
     | Compute Budget | Seeds | What to Report |
     |---|---|---|
-    | **Low** (LLM-scale, days/run) | 3 | Mean +/- std, note limited seeds |
-    | **Medium** (hours/run) | 5 | Mean +/- std, Wilcoxon signed-rank test |
-    | **High** (minutes/run) | 10+ | Mean +/- std, Wilcoxon or paired t-test, bootstrap CIs |
+    | **Low** (LLM-scale, days/run) | 3 | Mean +/- std, note limited seeds, no significance test |
+    | **Medium** (hours/run) | 5 | Mean +/- std, report as a trend |
+    | **High** (minutes/run) | 10+ | Mean +/- std, Wilcoxon signed-rank or paired t-test, bootstrap CIs |
 
 32. **Use paired evaluation.** Run your method and the baseline on the *same* seeds. This induces positive correlation, giving tighter confidence intervals at the same compute budget. ([Paired Bootstrap Protocol](https://arxiv.org/abs/2511.19794))
 
-33. **Default test: Wilcoxon signed-rank** (non-parametric, paired). Use `scipy.stats.wilcoxon(scores_ours, scores_baseline)`. It does not assume normality. Fall back to paired t-test (`ttest_rel`) if you have reason to assume normality.
+33. **Default test: Wilcoxon signed-rank** (non-parametric, paired). Use `scipy.stats.wilcoxon(scores_ours, scores_baseline)`. It does not assume normality. Fall back to paired t-test (`ttest_rel`) if you have reason to assume normality. Note: a two-sided Wilcoxon test cannot reach p < 0.05 with fewer than 6 seeds, so below that report mean +/- std and call it a trend.
 
 34. **Report it right:**
     - Always: mean +/- std (or SEM), number of seeds, which seeds
@@ -203,7 +203,7 @@ Distilled from the advice of [Bengio](https://cifar.ca/cifarnews/2018/08/01/q-a-
 58. **Reimplement to understand.** If you don't understand an algorithm well enough to code it from scratch, you don't understand it. ([Schulman](http://joschu.net/blog/opinionated-guide-ml-research.html), [Ng](https://www.kdnuggets.com/2019/09/advice-building-machine-learning-career-research-papers-andrew-ng.html))
 59. **Mine PhD theses for literature reviews.** They map active research domains better than any survey paper. ([Schulman](http://joschu.net/blog/opinionated-guide-ml-research.html))
 60. **Ship code publicly.** "Committing to releasing your code will force you to adopt better coding habits." ([Karpathy](http://karpathy.github.io/2016/09/07/phd/))
-61. **Open source is a scientific contribution.** Maintaining widely-used research software is real research output, not "just engineering." Every grad student who writes a one-off implementation that nobody else can run wastes the community's time. ([Varoquaux](https://gael-varoquaux.info/about.html))
+61. **Open source is a scientific contribution.** Maintaining widely-used research software is real research output, not "just engineering." Every grad student who writes a one-off implementation that nobody else can run wastes the community's time. ([Varoquaux](https://gael-varoquaux.info/programming/getting-a-big-scientific-prize-for-open-source-software.html))
 62. **Compound interest.** "Knowledge and productivity work like compound interest -- consistent daily effort compounds dramatically." ([Hamming](https://www.cs.virginia.edu/~robins/YouAndYourResearch.html))
 
 ---
